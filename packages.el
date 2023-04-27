@@ -48,10 +48,26 @@
       :location (recipe :fetcher github
                         :files ("*.el" "snippets")
                                      :repo "saburto/yasnippet-java-mode"))
+    mvn
     maven-test-mode
 
     ))
 
+
+(defun saburto-java/init-mvn ()
+  (use-package mvn
+    :defer nil
+    :init
+    (when (configuration-layer/package-used-p 'java-ts-mode)
+      (add-hook 'java-ts-mode-hook 'maven-test-mode)
+      (spacemacs/declare-prefix-for-mode 'java-ts-mode "mm" "maven"))
+    :config
+    (progn
+      (spacemacs/set-leader-keys-for-major-mode 'java-ts-mode
+        "mm"    'mvn
+        "ml"    'mvn-last
+        "mx"    'mvn-compile
+        "mc"   'mvn-clean))))
 
 (defun saburto-java/init-maven-test-mode ()
   (use-package maven-test-mode
@@ -59,9 +75,8 @@
     :init
     (when (configuration-layer/package-used-p 'java-ts-mode)
       (add-hook 'java-ts-mode-hook 'maven-test-mode)
-      (spacemacs/declare-prefix-for-mode 'java-ts-mode "mm" "maven")
       (spacemacs/declare-prefix-for-mode 'java-ts-mode "mtg" "goto to tests")
-      (spacemacs/declare-prefix-for-mode 'java-ts-mode "mmt" "tests"))
+      (spacemacs/declare-prefix-for-mode 'java-ts-mode "mmt" "maven tests"))
     :config
     (progn
       (spacemacs|hide-lighter maven-test-mode)

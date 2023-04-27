@@ -42,7 +42,7 @@
 
 (defconst saburto-java-packages
   '((java-ts-mode :location built-in)
-    (lsp-java :requires lsp-mode)
+    (lsp-java :requires (lsp-mode dap-mode))
     (java-snippets
       :requires yasnippet
       :location (recipe :fetcher github
@@ -50,24 +50,22 @@
                                      :repo "saburto/yasnippet-java-mode"))
     mvn
     maven-test-mode
-
     ))
 
 
 (defun saburto-java/init-mvn ()
   (use-package mvn
-    :defer nil
+    :defer t
     :init
     (when (configuration-layer/package-used-p 'java-ts-mode)
       (add-hook 'java-ts-mode-hook 'maven-test-mode)
-      (spacemacs/declare-prefix-for-mode 'java-ts-mode "mm" "maven"))
-    :config
-    (progn
+      (spacemacs/declare-prefix-for-mode 'java-ts-mode "mm" "maven")
       (spacemacs/set-leader-keys-for-major-mode 'java-ts-mode
         "mm"    'mvn
         "ml"    'mvn-last
-        "mx"    'mvn-compile
-        "mc"   'mvn-clean))))
+        "mc"    'mvn-compile
+        "mC"   'mvn-clean))
+    ))
 
 (defun saburto-java/init-maven-test-mode ()
   (use-package maven-test-mode
@@ -121,8 +119,17 @@
         "gku" 'spacemacs/lsp-java-super-type
         "gks" 'spacemacs/lsp-java-sub-type
         )
-
-
+      (add-to-list 'spacemacs--dap-supported-modes 'java-ts-mode)
+      (require 'dap-java)
+      (spacemacs/set-leader-keys-for-major-mode 'java-ts-mode
+        ;; debug
+        "ddj" 'dap-java-debug
+        "dtt" 'dap-java-debug-test-method
+        "dtc" 'dap-java-debug-test-class
+        ;; run
+        "tl" 'dap-java-run-last-test
+        "tt" 'dap-java-run-test-method
+        "tc" 'dap-java-run-test-class)
     )))
 
 (defun saburto-java/init-java-snippets ()

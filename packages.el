@@ -99,6 +99,7 @@
     :init
     (setq lsp-java-jdt-download-url "https://download.eclipse.org/jdtls/snapshots/jdt-language-server-latest.tar.gz")
     (setq lsp-java-vmargs '("-noverify" "-Xmx4G"  "-XX:+UseG1GC" "-XX:+UseStringDeduplication" "-javaagent:/home/saburto/.m2/repository/org/projectlombok/lombok/1.18.24/lombok-1.18.24.jar" ))
+    (setq lsp-java--download-root (concat "file://" (expand-file-name "install/" (file-name-directory (symbol-file 'saburto-java/init-lsp-java)))))
     :hook ((java-ts-mode . lsp-deferred))
     :config
     (progn
@@ -127,9 +128,9 @@
         "dtt" 'dap-java-debug-test-method
         "dtc" 'dap-java-debug-test-class
         ;; run
-        "tl" 'dap-java-run-last-test
-        "tt" 'dap-java-run-test-method
-        "tc" 'dap-java-run-test-class)
+        "tl" 'recompile
+        "tt" 'saburto-java/run-class-test-method
+        "tc" 'saburto-java/run-class-test)
     )))
 
 (defun saburto-java/init-java-snippets ()

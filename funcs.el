@@ -137,3 +137,7 @@
          (test-name (if method (format "%s#%s" fqcn method) fqcn)))
     (saburto-java--run-test-by-fqcn test-name)))
 
+(defun saburto-java--java-setup-lsp ()
+  (progn
+    (require 'lsp-java)
+    (lsp-deferred)))

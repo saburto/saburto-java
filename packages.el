@@ -50,8 +50,15 @@
                                      :repo "saburto/yasnippet-java-mode"))
     mvn
     maven-test-mode
+    smartparens
+    flycheck
     ))
 
+(defun saburto-java/post-init-flycheck ())
+
+(defun saburto-java/post-init-smartparens ()
+  (with-eval-after-load 'smartparens
+    (sp-local-pair 'java-ts-mode "/** " " */" :trigger "/**")))
 
 (defun saburto-java/init-mvn ()
   (use-package mvn
@@ -91,6 +98,7 @@
   (use-package java-ts-mode
     :defer t
     :mode (("\\.java\\'" . java-ts-mode))
+    :init (add-hook 'java-ts-mode-local-vars-hook #'saburto-java--java-setup-lsp)
     :hook ((java-ts-mode . (lambda () (setq c-basic-offset 4 tab-width 4))))))
 
 (defun saburto-java/init-lsp-java ()

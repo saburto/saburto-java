@@ -54,7 +54,7 @@
     flycheck
     ))
 
-(defun saburto-java/post-init-flycheck ())
+(defun saburto-java/post-init-flycheck ())))
 
 (defun saburto-java/post-init-smartparens ()
   (with-eval-after-load 'smartparens
